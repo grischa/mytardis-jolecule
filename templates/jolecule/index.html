@@ -1,0 +1,40 @@
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}jolecule/static/mobile.css" />
+
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/jquery.scrollTo.js"></script>
+
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/util.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/animation.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/v3.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/canvaswidget.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/protein.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/proteindisplay.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/embedjolecule.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}jolecule/js/dataserver.js"></script>
+
+
+<script type="text/javascript">
+user = 'public'; // need this public variable to tag views
+
+$(function() {
+    register_global_animation_loop(
+        new EmbedJolecule(
+	    '{{filename}}', // pdb_id
+	    '#mobile-body',  // view_id
+	    new StreetDataServer(
+	        '{{filename}}',
+	        '/api/v1/dataset_file/{{dataset_file_id}}/download',
+		'{% url 'tardis.apps.jolecule.views.loadViews' dataset_file_id %}',
+		'{% url 'tardis.apps.jolecule.views.saveViews' dataset_file_id %}',
+		'{{csrf_token}}'
+            ),
+	    150,
+	    "<b>loading...</b>",
+	    "<i>failed to load</i>",
+	    "Showing {{filename}}")
+	);
+    }
+);
+</script>
+<div id="jolecule-container" style="height:650px;margin-bottom:5px;">
+    <div id="mobile-body" style="height:650px;"></div>
+</div>
